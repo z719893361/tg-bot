@@ -16,11 +16,12 @@ class AdPrompt(Handler):
     点击广告发布
     """
     type = Message
-
-    async def support(self, message: str) -> bool:
+    @staticmethod
+    async def support(message: str) -> bool:
         return message == '📨发布广告'
 
-    async def process(self, message: Message, context: ContextTypes.DEFAULT_TYPE):
+    @staticmethod
+    async def process(message: Message, context: ContextTypes.DEFAULT_TYPE):
         text = env.get_template('ad/step_1').render()
         await message.reply_text(text, reply_to_message_id=message.message_id)
 
@@ -31,20 +32,11 @@ class AdContentParser(Handler):
     """
     type = Message
 
-    pattern_name = re.compile(r'项目名称\s*[:：]\s*([^\n]+)')
-    pattern_desc = re.compile(r'项目介绍\s*[:：]\s*([^\n]+)')
-    pattern_contacts = re.compile(r'联系人\s*[:：]\s*([^\n]+)')
-    pattern_price = re.compile(r'价格\s*[:：]\s*([^\n]+)')
-    pattern_channel = re.compile(r'频道\s*[:：]\s*([^\n$]+)')
+    pattern_ad = re.compile('项目名称[:：]([^$]+)\n项目介绍[:：]([^$]+)\n价格[:：]([^$]+)\n联系人[:：]([^$]+)\n?(?:频道[:：]([^$]+))?')
     pattern_button = re.compile(r'([^-\s]+)\s*-\s*([^\n\s$|]+)')
 
     async def support(self, content: str):
-        return all([
-            self.pattern_name.search(content),
-            self.pattern_desc.search(content),
-            self.pattern_contacts.search(content),
-            self.pattern_price.search(content)
-        ])
+        return self.pattern_ad.search(content)
 
     @staticmethod
     def get_regex_result(regex, content) -> str:
@@ -60,11 +52,12 @@ class AdContentParser(Handler):
             content: str,
             from_username: str
     ):
-        project_name = self.get_regex_result(self.pattern_name, content)
-        project_desc = self.get_regex_result(self.pattern_desc, content)
-        project_contact = self.get_regex_result(self.pattern_contacts, content)
-        project_price = self.get_regex_result(self.pattern_price, content)
-        project_channel = self.get_regex_result(self.pattern_channel, content)
+        match = self.pattern_ad.search(content)
+        project_name = match.group(1)
+        project_desc = match.group(2)
+        project_price = match.group(3)
+        project_contact = match.group(4)
+        project_channel = match.group(5)
         ad_content, parse_mode = await crud.template.get_template_content(
             db=db,
             robot_id=robot_id,
