@@ -35,7 +35,7 @@ class AdContentParser(Handler):
     evet_type = Message
     chat_type = ChatType.PRIVATE
     pattern_ad = re.compile(
-        pattern='项目名称[:：]([^$]+)\n项目介绍[:：]([^$]+)\n价格[:：]([^$]+)\n联系人[:：]([^$\n]+)(?:\n频道[:：]([^$]+))?'
+        pattern='项目名称[:：]([^$]+)项目介绍[:：]([^$]+)价格[:：]([^$]+)联系人[:：]([^\n$]+)(?:\n频道[:：]([^\n$]+))?'
     )
     pattern_button = re.compile(r'([^-\s]+)\s*-\s*([^\n\s$|]+)')
 
