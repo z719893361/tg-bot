@@ -1,0 +1,14 @@
+fastapi
+httpx
+Jinja2
+passlib
+pydantic
+python-dotenv
+python-telegram-bot
+python_jose
+SQLAlchemy>=2.0
+starlette
+uvicorn
+aiomysql
+requests
+cryptography

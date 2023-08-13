@@ -1,0 +1,27 @@
+{
+  "status": 0,
+  "msg": "",
+  "data": {
+    "pages": [
+      {
+        "label": "机器人配置",
+        "url": "/",
+        "schemaApi": "get:/pages/config.json"
+      },
+      {
+        "children": [
+          {
+            "label": "机器人配置",
+            "schemaApi": "get:/pages/config.json",
+            "url": "/config"
+          },
+          {
+            "label": "机器人管理",
+            "schemaApi": "get:/pages/robot.json",
+            "url": "/robot"
+          }
+        ]
+      }
+    ]
+  }
+}

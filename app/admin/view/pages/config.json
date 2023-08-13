@@ -1,0 +1,988 @@
+{
+  "type": "page",
+  "title": "配置",
+  "body": [
+    {
+      "type": "select",
+      "label": "选择机器人",
+      "name": "robot_id",
+      "id": "u:95ad76f68f92",
+      "source": {
+        "method": "get",
+        "url": "/robot/list",
+        "dataType": "json"
+      },
+      "labelField": "name",
+      "onEvent": {
+        "change": {
+          "weight": 0,
+          "actions": [
+            {
+              "componentId": "u:02fe6acc80f2",
+              "actionType": "setValue",
+              "args": {
+                "value": "${robot_id}"
+              }
+            }
+          ]
+        }
+      },
+      "valueField": "robot_id",
+      "multiple": false,
+      "selectFirst": true,
+      "creatable": false,
+      "showInvalidMatch": false
+    },
+    {
+      "type": "tabs",
+      "id": "u:7f661b808944",
+      "tabs": [
+        {
+          "type": "form",
+          "body": [
+            {
+              "type": "input-text",
+              "label": "钱包地址",
+              "name": "wallet.address",
+              "id": "u:7e404d0816e0",
+              "value": "",
+              "autoFill": {
+                "address": ""
+              }
+            },
+            {
+              "type": "input-number",
+              "id": "u:757c1268dc2d",
+              "label": "订单有效期",
+              "name": "wallet.expires",
+              "keyboard": true,
+              "step": 60,
+              "suffix": "秒",
+              "value": 1200,
+              "size": "sm",
+              "mode": "horizontal"
+            },
+            {
+              "type": "input-number",
+              "id": "u:8549374733bb",
+              "label": "发布广告费用",
+              "name": "ad_price",
+              "keyboard": true,
+              "step": 1,
+              "precision": 6,
+              "suffix": "U",
+              "min": 0,
+              "value": 5,
+              "size": "sm",
+              "labelWidth": "100px",
+              "mode": "horizontal"
+            },
+            {
+              "type": "input-text",
+              "id": "u:20ac4bc1c598",
+              "label": "群链接",
+              "name": "group.link"
+            },
+            {
+              "type": "input-number",
+              "id": "u:757c1268dc2a",
+              "label": "加群费用",
+              "name": "group.price",
+              "keyboard": true,
+              "step": 1,
+              "suffix": "U",
+              "value": 5,
+              "mode": "horizontal",
+              "size": "sm"
+            },
+            {
+              "type": "grid",
+              "columns": [
+              ],
+              "id": "u:9c49fa5e9c1b"
+            },
+            {
+              "type": "grid",
+              "columns": [
+              ],
+              "id": "u:197224e996e9"
+            },
+            {
+              "type": "grid",
+              "columns": [
+              ],
+              "id": "u:68553058137b"
+            },
+            {
+              "type": "grid",
+              "columns": [
+                {
+                  "body": [
+                    {
+                      "type": "textarea",
+                      "label": "加群",
+                      "name": "template.vip_group_prompt.content",
+                      "id": "u:791fd90a051c",
+                      "minRows": 4,
+                      "maxRows": 20
+                    }
+                  ],
+                  "id": "u:bf54a20f3d59",
+                  "md": 10
+                },
+                {
+                  "body": [
+                    {
+                      "type": "radios",
+                      "label": false,
+                      "name": "template.vip_group_prompt.parse_mode",
+                      "options": [
+                        {
+                          "label": "文本",
+                          "value": 0
+                        },
+                        {
+                          "label": "MARKDOWN",
+                          "value": 1
+                        },
+                        {
+                          "label": "HTML",
+                          "value": 2
+                        }
+                      ],
+                      "id": "u:24bd3714338a",
+                      "inline": false,
+                      "hidden": false,
+                      "value": ""
+                    }
+                  ],
+                  "id": "u:b47a76d2ad2d"
+                }
+              ],
+              "id": "u:bda2f47922fc",
+              "style": {
+                "marginTop": "10px",
+                "marginBottom": "10px"
+              }
+            },
+            {
+              "type": "grid",
+              "columns": [
+                {
+                  "body": [
+                    {
+                      "type": "textarea",
+                      "label": "欢迎消息",
+                      "name": "template.welcome_message.content",
+                      "id": "u:791fd90a051c",
+                      "minRows": 4,
+                      "maxRows": 20
+                    }
+                  ],
+                  "id": "u:bf54a20f3d59",
+                  "md": 10
+                },
+                {
+                  "body": [
+                    {
+                      "type": "radios",
+                      "label": false,
+                      "name": "template.welcome_message.parse_mode",
+                      "options": [
+                        {
+                          "label": "文本",
+                          "value": 0
+                        },
+                        {
+                          "label": "MARKDOWN",
+                          "value": 1
+                        },
+                        {
+                          "label": "HTML",
+                          "value": 2
+                        }
+                      ],
+                      "id": "u:24bd3714338a",
+                      "inline": false,
+                      "hidden": false,
+                      "value": ""
+                    }
+                  ],
+                  "id": "u:b47a76d2ad2d"
+                }
+              ],
+              "id": "u:bda2f47922fc",
+              "style": {
+                "marginTop": "10px",
+                "marginBottom": "10px"
+              }
+            },
+            {
+              "type": "grid",
+              "columns": [
+                {
+                  "body": [
+                    {
+                      "type": "textarea",
+                      "label": "活动内容",
+                      "name": "template.activity_notice.content",
+                      "id": "u:7f02b9d3a2ea",
+                      "minRows": 4,
+                      "maxRows": 20
+                    }
+                  ],
+                  "id": "u:b6dd62209e8b",
+                  "md": 10
+                },
+                {
+                  "body": [
+                    {
+                      "type": "radios",
+                      "label": false,
+                      "name": "template.activity_notice.parse_mode",
+                      "options": [
+                        {
+                          "label": "文本",
+                          "value": 0
+                        },
+                        {
+                          "label": "MARKDOWN",
+                          "value": 1
+                        },
+                        {
+                          "label": "HTML",
+                          "value": 2
+                        }
+                      ],
+                      "id": "u:88e1dca061a4",
+                      "inline": false,
+                      "hidden": false,
+                      "value": ""
+                    }
+                  ],
+                  "id": "u:13de4d8d8e62"
+                }
+              ],
+              "id": "u:c4923a6fcecc",
+              "style": {
+                "marginTop": "10px",
+                "marginBottom": "10px"
+              }
+            },
+            {
+              "type": "grid",
+              "columns": [
+                {
+                  "body": [
+                    {
+                      "type": "textarea",
+                      "label": "我要充值回复",
+                      "name": "template.recharge_button_prompt.content",
+                      "id": "u:f22d816f2d20",
+                      "minRows": 4,
+                      "maxRows": 20
+                    }
+                  ],
+                  "id": "u:5ff4b6a0b47e",
+                  "md": 10
+                },
+                {
+                  "body": [
+                    {
+                      "type": "radios",
+                      "label": false,
+                      "name": "template.recharge_button_prompt.parse_mode",
+                      "options": [
+                        {
+                          "label": "文本",
+                          "value": 0
+                        },
+                        {
+                          "label": "MARKDOWN",
+                          "value": 1
+                        },
+                        {
+                          "label": "HTML",
+                          "value": 2
+                        }
+                      ],
+                      "id": "u:975ef7c66dfe",
+                      "inline": false,
+                      "hidden": false,
+                      "value": ""
+                    }
+                  ],
+                  "id": "u:b7fa117c8275"
+                }
+              ],
+              "id": "u:33b463de6256",
+              "style": {
+                "marginTop": "10px",
+                "marginBottom": "10px"
+              }
+            },
+            {
+              "type": "grid",
+              "columns": [
+                {
+                  "body": [
+                    {
+                      "type": "textarea",
+                      "label": "选择金额回复",
+                      "name": "template.amount_selected_prompt.content",
+                      "id": "u:03e6a2067a75",
+                      "minRows": 4,
+                      "maxRows": 20
+                    }
+                  ],
+                  "id": "u:116081557b63",
+                  "md": 10
+                },
+                {
+                  "body": [
+                    {
+                      "type": "radios",
+                      "label": false,
+                      "name": "template.amount_selected_prompt.parse_mode",
+                      "options": [
+                        {
+                          "label": "文本",
+                          "value": 0
+                        },
+                        {
+                          "label": "MARKDOWN",
+                          "value": 1
+                        },
+                        {
+                          "label": "HTML",
+                          "value": 2
+                        }
+                      ],
+                      "id": "u:30741d653104",
+                      "inline": false,
+                      "hidden": false,
+                      "value": ""
+                    }
+                  ],
+                  "id": "u:ec29159f8022"
+                }
+              ],
+              "id": "u:f6e50decef03",
+              "style": {
+                "marginTop": "10px",
+                "marginBottom": "10px"
+              }
+            },
+            {
+              "type": "grid",
+              "columns": [
+                {
+                  "body": [
+                    {
+                      "type": "textarea",
+                      "label": "个人中心回复",
+                      "name": "template.user_profile.content",
+                      "id": "u:7c8923d4aee9",
+                      "minRows": 4,
+                      "maxRows": 20
+                    }
+                  ],
+                  "id": "u:3d31ae1bb70f",
+                  "md": 10
+                },
+                {
+                  "body": [
+                    {
+                      "type": "radios",
+                      "label": false,
+                      "name": "template.user_profile.parse_mode",
+                      "options": [
+                        {
+                          "label": "文本",
+                          "value": 0
+                        },
+                        {
+                          "label": "MARKDOWN",
+                          "value": 1
+                        },
+                        {
+                          "label": "HTML",
+                          "value": 2
+                        }
+                      ],
+                      "id": "u:6550d9745b9c",
+                      "inline": false,
+                      "hidden": false,
+                      "value": ""
+                    }
+                  ],
+                  "id": "u:de1c46336568"
+                }
+              ],
+              "id": "u:39ca3533a74e",
+              "style": {
+                "marginTop": "10px",
+                "marginBottom": "10px"
+              }
+            },
+            {
+              "type": "grid",
+              "columns": [
+              ],
+              "id": "u:dd5387f1fec5",
+              "style": {
+                "marginTop": "10px",
+                "marginBottom": "10px"
+              }
+            },
+            {
+              "type": "grid",
+              "columns": [
+                {
+                  "body": [
+                    {
+                      "type": "textarea",
+                      "label": "广告推送样板",
+                      "name": "template.advertisement_details.content",
+                      "id": "u:ce11e2a0a7c7",
+                      "minRows": 4,
+                      "maxRows": 20
+                    }
+                  ],
+                  "id": "u:279c75529a30",
+                  "md": 10
+                },
+                {
+                  "body": [
+                    {
+                      "type": "radios",
+                      "label": false,
+                      "name": "template.advertisement_details.parse_mode",
+                      "options": [
+                        {
+                          "label": "文本",
+                          "value": 0
+                        },
+                        {
+                          "label": "MARKDOWN",
+                          "value": 1
+                        },
+                        {
+                          "label": "HTML",
+                          "value": 2
+                        }
+                      ],
+                      "id": "u:ca599f36add7",
+                      "inline": false,
+                      "hidden": false,
+                      "value": ""
+                    }
+                  ],
+                  "id": "u:808ccf98637d"
+                }
+              ],
+              "id": "u:78ffa6fee92d",
+              "style": {
+                "marginTop": "10px",
+                "marginBottom": "10px"
+              }
+            },
+            {
+              "type": "grid",
+              "columns": [
+                {
+                  "body": [
+                    {
+                      "type": "textarea",
+                      "label": "余额不足回复",
+                      "name": "template.insufficient_balance.content",
+                      "id": "u:88b74806cc26",
+                      "minRows": 4,
+                      "maxRows": 20
+                    }
+                  ],
+                  "id": "u:267703fde656",
+                  "md": 10
+                },
+                {
+                  "body": [
+                    {
+                      "type": "radios",
+                      "label": false,
+                      "name": "template.insufficient_balance.parse_mode",
+                      "options": [
+                        {
+                          "label": "文本",
+                          "value": 0
+                        },
+                        {
+                          "label": "MARKDOWN",
+                          "value": 1
+                        },
+                        {
+                          "label": "HTML",
+                          "value": 2
+                        }
+                      ],
+                      "id": "u:cab16eddb66f",
+                      "inline": false,
+                      "hidden": false,
+                      "value": ""
+                    }
+                  ],
+                  "id": "u:0b5f5e7206aa"
+                }
+              ],
+              "id": "u:d2304d336f3e",
+              "style": {
+                "marginTop": "10px",
+                "marginBottom": "10px"
+              }
+            },
+            {
+              "type": "grid",
+              "columns": [
+                {
+                  "body": [
+                    {
+                      "type": "textarea",
+                      "label": "发送广告内容回复",
+                      "name": "template.advertisement_confirmation.content",
+                      "id": "u:a9d7340e2656",
+                      "minRows": 4,
+                      "maxRows": 20
+                    }
+                  ],
+                  "id": "u:7fd8ce1630a7",
+                  "md": 10
+                },
+                {
+                  "body": [
+                    {
+                      "type": "radios",
+                      "label": false,
+                      "name": "template.advertisement_confirmation.parse_mode",
+                      "options": [
+                        {
+                          "label": "文本",
+                          "value": 0
+                        },
+                        {
+                          "label": "MARKDOWN",
+                          "value": 1
+                        },
+                        {
+                          "label": "HTML",
+                          "value": 2
+                        }
+                      ],
+                      "id": "u:c9b19394d08d",
+                      "inline": false,
+                      "hidden": false,
+                      "value": ""
+                    }
+                  ],
+                  "id": "u:7cb77cad7d00"
+                }
+              ],
+              "id": "u:4bcdd8a1092a",
+              "style": {
+                "marginTop": "10px",
+                "marginBottom": "10px"
+              }
+            },
+            {
+              "type": "grid",
+              "columns": [
+                {
+                  "body": [
+                    {
+                      "type": "textarea",
+                      "label": "广告按钮设置",
+                      "name": "template.advertisement_button.content",
+                      "id": "u:a9d7340e2656",
+                      "minRows": 4,
+                      "maxRows": 20
+                    }
+                  ],
+                  "id": "u:7fd8ce1630a7",
+                  "md": 10
+                }
+              ],
+              "id": "u:4bcdd8a1092a",
+              "style": {
+                "marginTop": "10px",
+                "marginBottom": "10px"
+              }
+            }
+          ],
+          "id": "u:036a9bc53bbb",
+          "title": "配置",
+          "hidden": false,
+          "mode": "horizontal",
+          "initApi": "/config/${robot_id}/info",
+          "initFetchOn": "${!ISEMPTY(robot_id)}",
+          "api": {
+            "url": "/config/${robot_id}/update",
+            "method": "post",
+            "sendOn": "${!ISEMPTY(robot_id)}"
+          }
+        },
+        {
+          "title": "充值选项",
+          "body": [
+            {
+              "type": "crud",
+              "syncLocation": false,
+              "columns": [
+                {
+                  "name": "id",
+                  "label": "ID",
+                  "type": "text",
+                  "id": "u:ff7925839c35"
+                },
+                {
+                  "name": "amount",
+                  "label": "充值金额",
+                  "type": "text",
+                  "id": "u:244589929d2f"
+                },
+                {
+                  "name": "give",
+                  "label": "赠送金额",
+                  "type": "text",
+                  "id": "u:244589929d2e"
+                },
+                {
+                  "type": "operation",
+                  "label": "操作",
+                  "buttons": [
+                    {
+                      "type": "button",
+                      "label": "删除",
+                      "actionType": "ajax",
+                      "level": "link",
+                      "className": "text-danger",
+                      "confirmText": "确定要删除？",
+                      "api": {
+                        "method": "post",
+                        "url": "/recharge/${robot_id}/delete",
+                        "data": {
+                          "ids": [
+                            "${id}"
+                          ]
+                        }
+                      },
+                      "id": "u:fd2a8534f211"
+                    },
+                    {
+                      "label": "编辑",
+                      "type": "button",
+                      "actionType": "dialog",
+                      "level": "link",
+                      "dialog": {
+                        "title": "编辑",
+                        "body": {
+                          "type": "form",
+                          "api": {
+                            "method": "post",
+                            "url": "/recharge/${robot_id}/update"
+                          },
+                          "body": [
+                            {
+                              "name": "id",
+                              "type": "hidden",
+                              "value": "${id}"
+                            },
+                            {
+                              "label": "充值金额",
+                              "name": "amount",
+                              "type": "input-number",
+                              "precision": 6
+                            },
+                            {
+                              "label": "赠送金额",
+                              "name": "give",
+                              "type": "input-number",
+                              "precision": 6
+                            }
+                          ],
+                          "id": "u:46718309df99"
+                        }
+                      },
+                      "id": "u:7bbbdcb723e8"
+                    }
+                  ],
+                  "id": "u:392d01d4d27c"
+                }
+              ],
+              "bulkActions": [
+                {
+                  "type": "button",
+                  "level": "danger",
+                  "label": "批量删除",
+                  "actionType": "ajax",
+                  "confirmText": "确定要删除？",
+                  "api": {
+                    "method": "post",
+                    "url": "/recharge/${robot_id}/delete",
+                    "data": {
+                      "ids": "${items|pick:id|raw}"
+                    }
+                  },
+                  "id": "u:7d5afb014b03"
+                }
+              ],
+              "itemActions": [
+              ],
+              "features": [
+                "delete",
+                "update",
+                "create",
+                "bulkDelete"
+              ],
+              "headerToolbar": [
+                {
+                  "label": "新增",
+                  "type": "button",
+                  "actionType": "dialog",
+                  "level": "primary",
+                  "dialog": {
+                    "title": "新增",
+                    "body": {
+                      "type": "form",
+                      "api": {
+                        "method": "post",
+                        "url": "/recharge/${robot_id}/add",
+                        "dataType": "json"
+                      },
+                      "body": [
+                        {
+                          "type": "input-text",
+                          "name": "amount",
+                          "label": "充值金额",
+                          "id": "u:32cf07927975"
+                        },
+                        {
+                          "type": "input-text",
+                          "name": "give",
+                          "label": "赠送金额",
+                          "id": "u:32cf07927976"
+                        }
+                      ],
+                      "id": "u:e10b1b3d7dfe"
+                    }
+                  },
+                  "id": "u:4469e4f4fcd7",
+                  "onEvent": {
+                    "click": {
+                      "weight": 0,
+                      "actions": [
+                      ]
+                    }
+                  }
+                },
+                "bulkActions"
+              ],
+              "id": "u:895b4ebe4eac",
+              "perPageAvailable": [
+                10
+              ],
+              "messages": {
+              },
+              "initFetch": "",
+              "loadDataOnce": false,
+              "draggable": false,
+              "initFetchOn": "${!ISEMPTY(robot_id)}",
+              "api": "/recharge/${robot_id}/list"
+            }
+          ],
+          "id": "u:6331e4d667c7"
+        },
+        {
+          "title": "频道地址",
+          "body": [
+            {
+              "type": "crud",
+              "syncLocation": false,
+              "api": "/channel/${robot_id}",
+              "columns": [
+                {
+                  "name": "id",
+                  "label": "ID",
+                  "type": "text",
+                  "id": "u:fbf0fc6ac149"
+                },
+                {
+                  "name": "link",
+                  "label": "频道链接",
+                  "type": "text",
+                  "id": "u:501e4bc5c5c7"
+                },
+                {
+                  "type": "operation",
+                  "label": "操作",
+                  "buttons": [
+                    {
+                      "type": "button",
+                      "label": "删除",
+                      "actionType": "ajax",
+                      "level": "link",
+                      "className": "text-danger",
+                      "confirmText": "确定要删除？",
+                      "api": {
+                        "method": "post",
+                        "url": "/channel/${robot_id}/delete",
+                        "data": {
+                          "ids": [
+                            "${id}"
+                          ]
+                        }
+                      },
+                      "id": "u:e7f69a2213a5"
+                    },
+                    {
+                      "label": "编辑",
+                      "type": "button",
+                      "actionType": "dialog",
+                      "level": "link",
+                      "dialog": {
+                        "title": "编辑",
+                        "body": {
+                          "type": "form",
+                          "api": "/channel/${robot_id}/update",
+                          "body": [
+                            {
+                              "name": "link",
+                              "label": "频道链接",
+                              "type": "input-text",
+                              "id": "u:b9a1ee116ca4"
+                            }
+                          ],
+                          "id": "u:c5ae675eb598",
+                          "data": {
+                            "&": "$$"
+                          }
+                        }
+                      },
+                      "id": "u:942e05358f92"
+                    }
+                  ],
+                  "id": "u:b2397e5c4353"
+                }
+              ],
+              "bulkActions": [
+                {
+                  "type": "button",
+                  "level": "danger",
+                  "label": "批量删除",
+                  "actionType": "ajax",
+                  "confirmText": "确定要删除？",
+                  "api": {
+                    "method": "post",
+                    "url": "/channel/${robot_id}/delete",
+                    "data": {
+                      "ids": "${items|pick:id|raw}"
+                    }
+                  },
+                  "id": "u:c2e43da02b18"
+                }
+              ],
+              "itemActions": [
+              ],
+              "features": [
+                "bulkDelete",
+                "create",
+                "delete",
+                "update"
+              ],
+              "headerToolbar": [
+                {
+                  "label": "新增",
+                  "type": "button",
+                  "actionType": "dialog",
+                  "level": "primary",
+                  "dialog": {
+                    "title": "新增",
+                    "body": {
+                      "type": "form",
+                      "api": {
+                        "method": "post",
+                        "url": "/channel/${robot_id}/add",
+                        "data": {
+                          "link": "${link}"
+                        },
+                        "sendOn": "${!ISEMPTY(robot_id)}"
+                      },
+                      "body": [
+                        {
+                          "type": "input-text",
+                          "name": "link",
+                          "label": "频道链接",
+                          "id": "u:7d81c47b25ee"
+                        }
+                      ],
+                      "id": "u:a941b06ec680"
+                    }
+                  },
+                  "id": "u:8837c1392735",
+                  "onEvent": {
+                    "click": {
+                      "weight": 0,
+                      "actions": [
+                        {
+                          "componentId": "u:bba5cab150dc",
+                          "actionType": "reload",
+                          "args": {
+                            "resetPage": true
+                          },
+                          "data": null
+                        }
+                      ]
+                    }
+                  }
+                },
+                "bulkActions"
+              ],
+              "id": "u:bba5cab150dc",
+              "perPageAvailable": [
+                10
+              ],
+              "messages": {
+              },
+              "quickSaveApi": {
+                "url": "",
+                "method": "get",
+                "messages": {
+                },
+                "requestAdaptor": "",
+                "adaptor": "",
+                "dataType": "json",
+                "responseData": {
+                  "&": "$$"
+                }
+              },
+              "initFetchOn": "${!ISEMPTY(robot_id)}",
+              "loadDataOnce": false
+            }
+          ],
+          "id": "u:ee4e5bc304f8"
+        }
+      ],
+      "mountOnEnter": true,
+      "tabsMode": "card",
+      "onEvent": {
+        "change": {
+          "weight": 0,
+          "actions": [
+          ]
+        }
+      }
+    }
+  ],
+  "id": "u:02fe6acc80f2",
+  "asideResizor": false,
+  "pullRefresh": {
+    "disabled": true
+  }
+}

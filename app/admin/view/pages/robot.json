@@ -1,0 +1,167 @@
+{
+  "type": "page",
+  "title": "新增机器人",
+  "body": [
+    {
+      "type": "crud",
+      "api": {
+        "method": "get",
+        "url": "/robot/list",
+        "dataType": "json"
+      },
+      "columns": [
+        {
+          "name": "id",
+          "label": "ID",
+          "type": "text",
+          "id": "u:5cca27639ce1"
+        },
+        {
+          "name": "robot_id",
+          "label": "机器人ID",
+          "type": "text",
+          "id": "u:f46dd0227429"
+        },
+        {
+          "type": "text",
+          "label": "名称",
+          "name": "name",
+          "id": "u:69114d85dc7b"
+        },
+        {
+          "type": "text",
+          "label": "token",
+          "name": "token",
+          "id": "u:9e34533d7e25"
+        },
+        {
+          "type": "operation",
+          "label": "操作",
+          "buttons": [
+            {
+              "type": "button",
+              "label": "删除",
+              "confirmText": "确定要删除？",
+              "api": {
+                "url": "/robot/delete",
+                "method": "post",
+                "data": {
+                  "ids": [
+                    "${robot_id}"
+                  ]
+                },
+                "dataType": "json"
+              },
+              "actionType": "ajax",
+              "className": "text-danger",
+              "level": "link",
+              "id": "u:5e0973af5609"
+            },
+            {
+              "label": "编辑",
+              "type": "button",
+              "actionType": "dialog",
+              "level": "link",
+              "dialog": {
+                "title": "编辑",
+                "body": {
+                  "type": "form",
+                  "body": [
+                    {
+                      "type": "hidden",
+                      "name": "id"
+                    },
+                    {
+                      "label": "名称",
+                      "name": "name",
+                      "type": "input-text"
+                    },
+                    {
+                      "label": "token",
+                      "name": "token",
+                      "type": "input-text"
+                    }
+                  ],
+                  "api": {
+                    "method": "post",
+                    "url": "/robot/update",
+                    "data": {
+                      "&": "$$"
+                    }
+                  }
+                }
+              },
+              "id": "u:ba32911f740b"
+            }
+          ],
+          "id": "u:a19e09db67dc"
+        }
+      ],
+      "bulkActions": [
+        {
+          "type": "button",
+          "level": "danger",
+          "label": "批量删除",
+          "actionType": "ajax",
+          "confirmText": "确定要删除？",
+          "api": {
+            "method": "post",
+            "url": "/robot/delete",
+            "data": {
+              "ids": "${items|pick:robot_id|raw}"
+            }
+          },
+          "id": "u:3471c4eb3255"
+        }
+      ],
+      "itemActions": [
+      ],
+      "features": [
+        "bulkDelete",
+        "create",
+        "delete",
+        "update"
+      ],
+      "headerToolbar": [
+        {
+          "label": "新增",
+          "type": "button",
+          "actionType": "dialog",
+          "level": "primary",
+          "dialog": {
+            "title": "新增",
+            "body": {
+              "type": "form",
+              "api": {
+                "method": "post",
+                "url": "/robot/add",
+                "dataType": "json"
+              },
+              "body": [
+                {
+                  "type": "input-text",
+                  "name": "name",
+                  "label": "名称"
+                },
+                {
+                  "type": "input-text",
+                  "name": "token",
+                  "label": "token"
+                }
+              ]
+            }
+          },
+          "id": "u:f769ebc27546"
+        },
+        "bulkActions"
+      ],
+      "id": "u:0247c60df9df",
+      "perPageAvailable": [
+        10
+      ],
+      "loadDataOnce": true,
+      "initFetch": true
+    }
+  ],
+  "id": "u:03972a198b17"
+}
