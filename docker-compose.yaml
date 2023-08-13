@@ -1,0 +1,27 @@
+services:
+  db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: tg-robot
+      MYSQL_USER: tg
+      MYSQL_PASSWORD: dfBXdfK02UbyU7ZH
+      MYSQL_ROOT_PASSWORD: dfBXdfK02UbyU7ZH
+    volumes:
+      - ./data:/var/lib/mysql
+
+  web:
+    build:
+      context: .
+      dockerfile: dockerfile/python
+    container_name: web
+    restart: always
+    environment:
+      MYSQL_URL: 'mysql+aiomysql://tg:dfBXdfK02UbyU7ZH@db:3306/tg-robot'
+    ports:
+      - "8000:8000"
+    links:
+      - db
+    depends_on:
+      - db
+    
