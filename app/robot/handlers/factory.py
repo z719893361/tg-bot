@@ -1,9 +1,12 @@
 from abc import abstractmethod
-from telegram import Update
+from typing import Type, Union
+from telegram import Update, Message, CallbackQuery
+from telegram.constants import ChatType
 
 
 class Handler:
-    type = ...
+    evet_type: Type[ChatType]
+    chat_type: Union[Message, CallbackQuery]
 
     @abstractmethod
     async def process(self, *args, **kwargs):
@@ -12,4 +15,3 @@ class Handler:
     @abstractmethod
     async def support(self, *args, **kwargs):
         pass
-

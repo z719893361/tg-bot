@@ -1,7 +1,7 @@
 import re
 from jinja2 import Template, Environment, FileSystemLoader
 from sqlalchemy.ext.asyncio import AsyncSession
-from telegram.constants import ParseMode
+from telegram.constants import ChatType
 from telegram.ext import ContextTypes
 from telegram import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from config.config import TemplateConstant
@@ -15,7 +15,9 @@ class AdPrompt(Handler):
     """
     点击广告发布
     """
-    type = Message
+    evet_type = Message
+    chat_type = ChatType.PRIVATE
+
     @staticmethod
     async def support(message: str) -> bool:
         return message == '📨发布广告'
@@ -30,9 +32,11 @@ class AdContentParser(Handler):
     """
     广告内容解析
     """
-    type = Message
-
-    pattern_ad = re.compile('项目名称[:：]([^$]+)\n项目介绍[:：]([^$]+)\n价格[:：]([^$]+)\n联系人[:：]([^$]+)\n?(?:频道[:：]([^$]+))?')
+    evet_type = Message
+    chat_type = ChatType.PRIVATE
+    pattern_ad = re.compile(
+        pattern='项目名称[:：]([^$]+)\n项目介绍[:：]([^$]+)\n价格[:：]([^$]+)\n联系人[:：]([^$\n]+)(?:\n频道[:：]([^$]+))?'
+    )
     pattern_button = re.compile(r'([^-\s]+)\s*-\s*([^\n\s$|]+)')
 
     async def support(self, content: str):
@@ -92,7 +96,8 @@ class AdContentParser(Handler):
         context.user_data['push_ad_keyboard'] = ad_keyboard
         await message.reply_text(text=ad_content, parse_mode=parse_mode, reply_markup=ad_keyboard)
         # 广告确认发布
-        ad_confirm_content, parse_mode = await crud.template.get_template_content(db, robot_id, TemplateConstant.ADVERTISEMENT_CONFIRMATION)
+        ad_confirm_content, parse_mode = await crud.template.get_template_content(db, robot_id,
+                                                                                  TemplateConstant.ADVERTISEMENT_CONFIRMATION)
         push_ad_price = await crud.ad_price.get_price(db, robot_id)
         context.bot_data['push_ad_price'] = push_ad_price
         ad_confirm_template = Template(ad_confirm_content)
@@ -107,7 +112,8 @@ class AdContentParser(Handler):
 
 
 class AdPublisher(Handler):
-    type = CallbackQuery
+    evet_type = CallbackQuery
+    chat_type = ChatType.PRIVATE
 
     async def support(self, data: str):
         return data in ['push_ad_ok', 'push_ad_no']

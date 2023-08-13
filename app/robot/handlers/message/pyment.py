@@ -4,6 +4,9 @@ from jinja2 import Template
 from sqlalchemy.ext.asyncio import AsyncSession
 from telegram import Message, CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton
 from decimal import Decimal
+
+from telegram.constants import ChatType
+
 from config.config import TemplateConstant
 from db import crud
 from models.form.order import OrderForm
@@ -11,7 +14,8 @@ from robot.handlers.factory import Handler
 
 
 class PymentRecharge(Handler):
-    type = CallbackQuery
+    evet_type = CallbackQuery
+    chat_type = ChatType.PRIVATE
 
     pattern = re.compile(r'recharge_(\d+.?\d*)')
 
@@ -85,7 +89,8 @@ async def create_buttom(db, robot_id):
 
 
 class PymentMessage(Handler):
-    type = Message
+    evet_type = Message
+    chat_type = ChatType.PRIVATE
 
     async def support(self, message: str):
         return message == '💰我要充值'
@@ -109,7 +114,8 @@ class RechargeViewCallback(Handler):
     """
     充值按钮
     """
-    type = CallbackQuery
+    evet_type = CallbackQuery
+    chat_type = ChatType.PRIVATE
 
     async def support(self, message: str):
         return message == 'recharge'

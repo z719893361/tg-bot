@@ -2,6 +2,7 @@ from inspect import isasyncgen, Parameter, signature, isgenerator
 from pathlib import Path
 from typing import List, Dict, Any
 from telegram import Update, Message, CallbackQuery
+from telegram.constants import ChatType
 from typing import Generator
 from telegram.ext import ContextTypes
 from robot.handlers.factory import Handler
@@ -16,31 +17,32 @@ logger.setLevel(logging.INFO)
 
 
 class Comosite(Handler):
-    messager_handle: List[Handler] = []
-    callback_handle: List[Handler] = []
+    handle: List[Handler] = []
 
     def add_handle(self, handle: Handler):
-        if handle.type == Message:
-            self.messager_handle.append(handle)
-        if handle.type == CallbackQuery:
-            self.callback_handle.append(handle)
+        self.handle.append(handle)
 
     async def support(self, update: Update):
         return update.message or update.callback_query
 
     async def process(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        handlers: List[Handler] = []
-        if update.message:
-            handlers = self.messager_handle
-        if update.callback_query:
-            handlers = self.callback_handle
         generator: List[Generator] = []
         current_context: Dict[Parameter, Any] = {}
+        envet_type = None
+        if update.message:
+            envet_type = Message
+        if update.callback_query:
+            envet_type = CallbackQuery
         try:
-            for handle in handlers:
+            for handle in self.handle:
+                # 事件类型判断
+                if handle.chat_type != handle.chat_type or handle.evet_type != envet_type:
+                    continue
+                # 判断是否支持处理
                 arguments = await self.build_params(handle.support, update, context, current_context, generator)
                 if not await handle.support(*arguments):
                     continue
+                # 消息处理
                 arguments = await self.build_params(handle.process, update, context, current_context, generator)
                 await handle.process(*arguments)
                 break

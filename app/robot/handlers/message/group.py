@@ -1,7 +1,7 @@
 import re
-
 from sqlalchemy.ext.asyncio import AsyncSession
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, Message, CallbackQuery, Bot
+from telegram.constants import ChatType
 from jinja2 import Template
 from config.config import TemplateConstant
 from db import crud
@@ -9,7 +9,8 @@ from robot.handlers.factory import Handler
 
 
 class JoinGroupMessage(Handler):
-    type = Message
+    evet_type = Message
+    chat_type = ChatType.PRIVATE
 
     async def support(self, message: str) -> bool:
         return message == '👥进内部群'
@@ -36,7 +37,8 @@ class JoinGroupMessage(Handler):
 
 
 class JoinGroupCall(Handler):
-    type = CallbackQuery
+    evet_type = CallbackQuery
+    chat_type = ChatType.PRIVATE
 
     async def support(self, data: str) -> bool:
         return data in ['group_join_ok', 'group_join_no']

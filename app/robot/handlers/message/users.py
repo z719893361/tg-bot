@@ -1,7 +1,7 @@
 from jinja2 import Template
 from sqlalchemy.ext.asyncio import AsyncSession
 from telegram import Message
-from decimal import Decimal
+from telegram.constants import ChatType
 
 from config.config import TemplateConstant
 from db import crud
@@ -9,7 +9,8 @@ from robot.handlers.factory import Handler
 
 
 class User(Handler):
-    type = Message
+    evet_type = Message
+    chat_type = ChatType.PRIVATE
 
     async def support(self, message: str) -> bool:
         return message == '👤个人中心'

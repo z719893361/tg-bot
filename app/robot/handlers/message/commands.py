@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from telegram import Message, ReplyKeyboardMarkup, KeyboardButton
+from telegram.constants import ChatType
 from jinja2 import Template
 from config.config import TemplateConstant
 from db import crud
@@ -7,7 +8,8 @@ from robot.handlers.factory import Handler
 
 
 class Start(Handler):
-    type = Message
+    evet_type = Message
+    chat_type = ChatType.PRIVATE
 
     async def support(self, message: str) -> bool:
         return message == '/start'

@@ -1,9 +1,11 @@
+from telegram.constants import ChatType
 from robot.handlers.factory import Handler
 from telegram import Message
 
 
 class NotMatch(Handler):
-    type = Message
+    evet_type = Message
+    chat_type = ChatType.PRIVATE
 
     async def support(self):
         return True
