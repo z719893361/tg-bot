@@ -1,29 +1,43 @@
-from inspect import isasyncgen, Parameter, signature, isgenerator
+import logging
 from pathlib import Path
 from typing import List, Dict, Any
-from telegram import Update, Message, CallbackQuery
-from telegram.constants import ChatType
 from typing import Generator
+from inspect import isasyncgen, Parameter, signature, isgenerator
 from telegram.ext import ContextTypes
-from robot.handlers.factory import Handler
-from robot.handlers.custom.not_match import NotMatch
+from telegram import Update, Message, CallbackQuery
+from robot.handlers.factory import HandlerFactory
 from robot.arguments.composite import arguments_composite
-from robot.utlis.load import load_classes_from_directory
+from robot.handlers.scope import ActionHandlerRegistry
+from robot.utlis.load import scan_and_load
 
-import logging
 
 logger = logging.getLogger('消息')
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.ERROR)
 
 
-class Comosite(Handler):
-    handle: List[Handler] = []
+class DecoratorInfo:
+    handler: HandlerFactory = ...
+    scope: ActionHandlerRegistry = ...
+    order: int = ...
 
-    def add_handle(self, handle: Handler):
-        self.handle.append(handle)
+    def __init__(self, handler_cls, scpoe, order):
+        self.handler = handler_cls
+        self.scope = scpoe
+        self.order = order
+
+
+class Comosite(HandlerFactory):
+    handles: List[DecoratorInfo] = []
+
+    def register(self, scope, order=0):
+        def decorator(cls):
+            self.handles.append(DecoratorInfo(cls(), scope, order))
+            self.handles.sort(key=lambda x: x.order)
+
+        return decorator
 
     async def support(self, update: Update):
-        return update.message or update.callback_query
+        return True
 
     async def process(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         generator: List[Generator] = []
@@ -34,17 +48,14 @@ class Comosite(Handler):
         if update.callback_query:
             envet_type = CallbackQuery
         try:
-            for handle in self.handle:
-                # 事件类型判断
-                if handle.chat_type != handle.chat_type or handle.evet_type != envet_type:
+            for handle in self.handles:
+                if not handle.scope.support(envet_type) or not handle.scope.support(update.effective_chat.type):
                     continue
-                # 判断是否支持处理
-                arguments = await self.build_params(handle.support, update, context, current_context, generator)
-                if not await handle.support(*arguments):
+                arguments = await self.build_params(handle.handler.support, update, context, current_context, generator)
+                if not await handle.handler.support(*arguments):
                     continue
-                # 消息处理
-                arguments = await self.build_params(handle.process, update, context, current_context, generator)
-                await handle.process(*arguments)
+                arguments = await self.build_params(handle.handler.process, update, context, current_context, generator)
+                await handle.handler.process(*arguments)
                 break
         except Exception as e:
             logger.error(e)
@@ -53,14 +64,14 @@ class Comosite(Handler):
 
     @staticmethod
     async def build_params(
-            function,
+            func,
             update,
             context: ContextTypes.DEFAULT_TYPE,
             current_context: Dict,
             generator: List[Generator]
     ) -> List:
         arguments = []
-        for param in signature(function).parameters.values():
+        for param in signature(func).parameters.values():
             name = current_context.get(param)
             if name is not None:
                 arguments.append(name)
@@ -83,11 +94,7 @@ class Comosite(Handler):
                 pass
 
 
-handle_comosite = Comosite()
-
-current_dir = Path(__file__).absolute().parent
-for cls in load_classes_from_directory(current_dir.joinpath('message'), Handler):
-    handle_comosite.add_handle(cls())
-
-# 没有指令匹配
-handle_comosite.add_handle(NotMatch())
+# 托管所有处理器
+handles = Comosite()
+# 扫描并加载, 排除自己的目录
+scan_and_load(Path(__file__).parent, Path(__file__))

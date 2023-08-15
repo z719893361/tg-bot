@@ -1,11 +1,12 @@
-from telegram.constants import ChatType
-from robot.handlers.factory import Handler
 from telegram import Message
 
+from robot.handlers.factory import HandlerFactory
+from robot.handlers.comosite import handles
+from robot.handlers.scope import ReplyScope
 
-class NotMatch(Handler):
-    evet_type = Message
-    chat_type = ChatType.PRIVATE
+
+@handles.register(scope=ReplyScope.Message | ReplyScope.Private, order=100)
+class NotMatch(HandlerFactory):
 
     async def support(self):
         return True
