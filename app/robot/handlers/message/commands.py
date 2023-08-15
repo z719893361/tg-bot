@@ -1,15 +1,15 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from telegram import Message, ReplyKeyboardMarkup, KeyboardButton
-from telegram.constants import ChatType
 from jinja2 import Template
 from config.config import TemplateConstant
 from db import crud
-from robot.handlers.factory import Handler
+from robot.handlers.comosite import handles
+from robot.handlers.factory import HandlerFactory
+from robot.handlers.scope import ReplyScope
 
 
-class Start(Handler):
-    evet_type = Message
-    chat_type = ChatType.PRIVATE
+@handles.register(ReplyScope.Message | ReplyScope.Private)
+class Start(HandlerFactory):
 
     async def support(self, message: str) -> bool:
         return message == '/start'
@@ -39,8 +39,14 @@ class Start(Handler):
         keyboard = ReplyKeyboardMarkup(
             [
                 [KeyboardButton("📨发布广告"), KeyboardButton("💰我要充值")],
-                [KeyboardButton("👤个人中心"), KeyboardButton("👥进内部群")]
+                [KeyboardButton("👤个人中心"), KeyboardButton("👥进内部群")],
+                [KeyboardButton("定制供需机器人联系")]
             ],
             resize_keyboard=True
         )
-        await message.reply_text(text, reply_markup=keyboard, parse_mode=parse_mode, reply_to_message_id=message.message_id)
+        await message.reply_text(
+            text=text,
+            reply_markup=keyboard,
+            parse_mode=parse_mode,
+            reply_to_message_id=message.message_id
+        )

@@ -1,16 +1,16 @@
 import re
 from sqlalchemy.ext.asyncio import AsyncSession
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, Message, CallbackQuery, Bot
-from telegram.constants import ChatType
 from jinja2 import Template
 from config.config import TemplateConstant
 from db import crud
-from robot.handlers.factory import Handler
+from robot.handlers.comosite import handles
+from robot.handlers.factory import HandlerFactory
+from robot.handlers.scope import ReplyScope
 
 
-class JoinGroupMessage(Handler):
-    evet_type = Message
-    chat_type = ChatType.PRIVATE
+@handles.register(ReplyScope.Message | ReplyScope.Private)
+class JoinGroupMessage(HandlerFactory):
 
     async def support(self, message: str) -> bool:
         return message == '👥进内部群'
@@ -36,9 +36,8 @@ class JoinGroupMessage(Handler):
         )
 
 
-class JoinGroupCall(Handler):
-    evet_type = CallbackQuery
-    chat_type = ChatType.PRIVATE
+@handles.register(ReplyScope.CallbackQuery | ReplyScope.Private)
+class JoinGroupCall(HandlerFactory):
 
     async def support(self, data: str) -> bool:
         return data in ['group_join_ok', 'group_join_no']

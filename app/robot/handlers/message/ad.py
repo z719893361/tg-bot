@@ -1,39 +1,39 @@
 import re
 from jinja2 import Template, Environment, FileSystemLoader
 from sqlalchemy.ext.asyncio import AsyncSession
-from telegram.constants import ChatType
 from telegram.ext import ContextTypes
-from telegram import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
+from telegram import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from config.config import TemplateConstant
+from robot.handlers.comosite import handles
+from robot.handlers.factory import HandlerFactory
+from robot.handlers.scope import ReplyScope
 from db import crud
-from robot.handlers.factory import Handler
+
 
 env = Environment(loader=FileSystemLoader('robot/template'))
 
 
-class AdPrompt(Handler):
+@handles.register(ReplyScope.Message | ReplyScope.Private)
+class AdPrompt(HandlerFactory):
     """
     点击广告发布
     """
-    evet_type = Message
-    chat_type = ChatType.PRIVATE
-
     @staticmethod
     async def support(message: str) -> bool:
         return message == '📨发布广告'
 
     @staticmethod
     async def process(message: Message, context: ContextTypes.DEFAULT_TYPE):
-        text = env.get_template('ad/step_1').render()
-        await message.reply_text(text, reply_to_message_id=message.message_id)
+        text = env.get_template('ad/step1').render()
+        await message.reply_text(text=text, reply_to_message_id=message.message_id)
 
 
-class AdContentParser(Handler):
+@handles.register(ReplyScope.Message | ReplyScope.Private)
+class AdContentParser(HandlerFactory):
     """
     广告内容解析
     """
-    evet_type = Message
-    chat_type = ChatType.PRIVATE
+
     pattern_ad = re.compile(
         pattern=r'项目名称[:：]([^$]+)\n项目介绍[:：]([^$]+)\n价格[:：]([^$]+)\n联系人[:：]([^\n$]+)(?:\n频道[:：]([^\n$]+))?'
     )
@@ -113,9 +113,11 @@ class AdContentParser(Handler):
         await message.reply_text(text=ad_confirm_text, parse_mode=parse_mode, reply_markup=ad_confirm_keyboard)
 
 
-class AdPublisher(Handler):
-    evet_type = CallbackQuery
-    chat_type = ChatType.PRIVATE
+@handles.register(ReplyScope.CallbackQuery | ReplyScope.Private)
+class AdPublisher(HandlerFactory):
+    """
+    广告发布
+    """
 
     async def support(self, data: str):
         return data in ['push_ad_ok', 'push_ad_no']

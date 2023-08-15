@@ -1,16 +1,15 @@
+from telegram import Message
 from jinja2 import Template
 from sqlalchemy.ext.asyncio import AsyncSession
-from telegram import Message
-from telegram.constants import ChatType
-
 from config.config import TemplateConstant
+from robot.handlers.comosite import handles
+from robot.handlers.factory import HandlerFactory
+from robot.handlers.scope import ReplyScope
 from db import crud
-from robot.handlers.factory import Handler
 
 
-class User(Handler):
-    evet_type = Message
-    chat_type = ChatType.PRIVATE
+@handles.register(ReplyScope.Message | ReplyScope.Private)
+class User(HandlerFactory):
 
     async def support(self, message: str) -> bool:
         return message == '👤个人中心'
