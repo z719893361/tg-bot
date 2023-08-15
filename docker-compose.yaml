@@ -24,4 +24,4 @@ services:
       - db
     depends_on:
       - db
-    
+
