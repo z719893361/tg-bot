@@ -1,7 +1,7 @@
 from typing import Optional, Union, Dict, List
 from telegram import Update
 from telegram.ext import ApplicationBuilder, BaseHandler, ContextTypes, Application
-from robot.handlers.comosite import handle_comosite
+from robot.handlers.comosite import handles
 
 
 class AllHandler(BaseHandler):
@@ -10,7 +10,7 @@ class AllHandler(BaseHandler):
 
     @staticmethod
     async def handle(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-        await handle_comosite.process(update, context)
+        await handles.process(update, context)
 
     def check_update(self, update: object) -> Optional[Union[bool, object]]:
         return update
