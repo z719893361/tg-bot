@@ -1,15 +1,14 @@
 import logging
-from pathlib import Path
 from typing import List, Dict, Any
 from typing import Generator
+from pathlib import Path
 from inspect import isasyncgen, Parameter, signature, isgenerator
 from telegram.ext import ContextTypes
 from telegram import Update, Message, CallbackQuery
 from robot.handlers.factory import HandlerFactory
 from robot.arguments.composite import arguments_composite
 from robot.handlers.scope import ActionHandlerRegistry
-from robot.utlis.load import scan_and_load
-
+from robot.utlis.load import scan_and_load, load_module
 
 logger = logging.getLogger('消息')
 logger.setLevel(logging.ERROR)
@@ -27,12 +26,12 @@ class DecoratorInfo:
 
 
 class Comosite(HandlerFactory):
-    handles: List[DecoratorInfo] = []
+    _handles: List[DecoratorInfo] = []
 
     def register(self, scope, order=0):
         def decorator(cls):
-            self.handles.append(DecoratorInfo(cls(), scope, order))
-            self.handles.sort(key=lambda x: x.order)
+            self._handles.append(DecoratorInfo(cls(), scope, order))
+            self._handles.sort(key=lambda x: x.order)
 
         return decorator
 
@@ -48,7 +47,7 @@ class Comosite(HandlerFactory):
         if update.callback_query:
             envet_type = CallbackQuery
         try:
-            for handle in self.handles:
+            for handle in self._handles:
                 if not handle.scope.support(envet_type) or not handle.scope.support(update.effective_chat.type):
                     continue
                 arguments = await self.build_params(handle.handler.support, update, context, current_context, generator)
@@ -94,7 +93,9 @@ class Comosite(HandlerFactory):
                 pass
 
 
-# 托管所有处理器
 handles = Comosite()
-# 扫描并加载, 排除自己的目录
-scan_and_load(Path(__file__).parent, Path(__file__))
+
+# 扫描并导入当前目录下所有Py文件，无需显式导入
+load_module(Path(__file__).parent)
+load_module(Path(__file__).parent)
+load_module(Path(__file__).parent)

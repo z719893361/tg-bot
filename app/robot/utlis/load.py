@@ -31,6 +31,7 @@ def scan_and_load(directory: Path):
         else:
             spec = spec_from_file_location(module_name, path)
             module = module_from_spec(spec)
+            sys.modules[module_name] = module
             spec.loader.exec_module(module)
         yield module
 
@@ -47,6 +48,6 @@ def load_classes(directory: Path, base_class: Type[T]) -> List[Type[T]]:
 
 
 def load_module(directory: Path):
-    for name in scan_and_load(directory):
+    for _ in scan_and_load(directory):
         pass
 

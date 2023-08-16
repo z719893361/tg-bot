@@ -4,7 +4,7 @@ from typing import List, Dict, Set
 from telegram import Update
 from telegram.ext import ContextTypes
 
-from robot.utlis.load import load_classes_from_directory
+from robot.utlis.load import load_classes
 from robot.arguments.factory import MethodArgumentResolver
 
 
@@ -42,6 +42,6 @@ class CompositeResolver(MethodArgumentResolver):
 
 arguments_composite = CompositeResolver()
 current_dir = Path(__file__).parent.joinpath('Impl')
-for cls in load_classes_from_directory(current_dir, MethodArgumentResolver):
+for cls in load_classes(current_dir, MethodArgumentResolver):
     arguments_composite.add_resolve(cls())
 
