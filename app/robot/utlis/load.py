@@ -1,3 +1,4 @@
+import functools
 import inspect
 import sys
 from importlib.util import spec_from_file_location, module_from_spec
@@ -19,13 +20,25 @@ def load_classes_from_directory(directory: Path, base_class: Type[T]) -> List[Ty
                 yield cls
 
 
-def scan_and_load(directory: Path, current):
+@functools.lru_cache()
+def get_project_root():
+    current_path = Path(__file__)
+    for _ in range(__name__.count('.') + 1):
+        current_path = current_path.parent
+    return current_path
+
+
+def scan_and_load(directory: Path):
+    root = get_project_root()
+
     for path in directory.glob('*'):
-        if path == current:
-            continue
-        if path.match('*.py'):
-            spec = spec_from_file_location(__name__, path)
-            module = module_from_spec(spec)
-            spec.loader.exec_module(module)
         if path.is_dir():
-            scan_and_load(path, current)
+            scan_and_load(path)
+        if not path.match('*.py'):
+            continue
+        module_name = path.relative_to(root).as_posix().replace('/', '.').replace('\\', '.').rstrip('.py')
+        if module_name in sys.modules:
+            continue
+        spec = spec_from_file_location(module_name, path)
+        module = module_from_spec(spec)
+        spec.loader.exec_module(module)
