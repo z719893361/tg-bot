@@ -28,3 +28,5 @@ class ReplyScope:
     Message = ActionHandlerRegistry(Message)
     CallbackQuery = ActionHandlerRegistry(CallbackQuery)
 
+
+
